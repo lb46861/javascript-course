@@ -54,6 +54,18 @@ const restaurant = {
   },
 };
 
+const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
+for (const item of menu) console.log(item);
+
+for (const [i, el] of menu.entries()) {
+  console.log(`${i + 1}: ${el}`);
+}
+
+//console.log([...menu.entries()]);
+
+/*
+
+// CODING CHALLENGE #1
 const game = {
   team1: 'Bayern Munich',
   team2: 'Borrussia Dortmund',
@@ -116,6 +128,7 @@ const allPlayers = [...players1, ...players2];
 const playersFinal = [...players1, 'Thiago', 'Coutinho', 'Perisic'];
 //console.log(playersFinal);
 
+// Nested destruction
 // const {
 //   odds: { team1, x: draw, team2 },
 // } = game;
@@ -130,7 +143,7 @@ console.log(team1, draw, team2);
 team1 < team2 && console.log('Team 1 is more likely to win');
 team1 > team2 && console.log('Team 2 is more likely to win');
 
-/*
+
 restaurant.numGuests = 0;
 const guests = restaurant.numGuests || 10;
 console.log(guests);
