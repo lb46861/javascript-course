@@ -54,6 +54,16 @@ const restaurant = {
   },
 };
 
+restaurant.numGuests = 0;
+const guests = restaurant.numGuests || 10;
+console.log(guests);
+
+// NUllish: null and undefined (NOT 0 or '')
+const guestsCorrect = restaurant.numGuests ?? 10;
+console.log(guestsCorrect);
+
+/*
+
 console.log('--- OR ---');
 // LOGICAL OPERATORS
 // They can use any data type, trturn any data type, short-circuiting
@@ -83,7 +93,7 @@ if (restaurant.orderPizza) {
 restaurant.orderPizza &&
   restaurant.orderPizza('mushrooms', 'spinach', 'pineapple');
 
-/*
+
 // 1) Destructing
 
 // SPREAD beacuse on RIGHT side of =
