@@ -55,6 +55,86 @@ const restaurant = {
   },
 };
 
+// CHALLENGE #2
+const game = {
+  team1: 'Bayern Munich',
+  team2: 'Borrussia Dortmund',
+  players: [
+    [
+      'Neuer',
+      'Pavard',
+      'Martinez',
+      'Alaba',
+      'Davies',
+      'Kimmich',
+      'Goretzka',
+      'Coman',
+      'Muller',
+      'Gnarby',
+      'Lewandowski',
+    ],
+    [
+      'Burki',
+      'Schulz',
+      'Hummels',
+      'Akanji',
+      'Hakimi',
+      'Weigl',
+      'Witsel',
+      'Hazard',
+      'Brandt',
+      'Sancho',
+      'Gotze',
+    ],
+  ],
+  score: '4:0',
+  scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+  date: 'Nov 9th, 2037',
+  odds: {
+    team1: 1.33,
+    x: 3.25,
+    team2: 6.5,
+  },
+
+  printGoals: function (...players) {
+    let sum = 0;
+    for (let i = 0; i < players.length; i++) {
+      console.log(players[i]);
+      sum += 1;
+    }
+    console.log(`Total goals: ${sum}`);
+  },
+};
+
+let scorers = {};
+for (let player of game.scored.values()) {
+  scorers[player] ? scorers[player]++ : (scorers[player] = 1);
+}
+
+console.log(scorers);
+for (let [i, j] of game.scored.entries()) {
+  console.log(`Goal ${i + 1}: ${j}`);
+}
+
+const myOdds = Object.values(game.odds);
+let averageOdd = 0;
+for (const i of myOdds) {
+  averageOdd += i;
+}
+console.log(averageOdd / myOdds.length);
+
+for (const [team, odd] of Object.entries(game.odds)) {
+  const teamOption = team === 'x' ? 'draw' : `${game[team]}`;
+  console.log(`Odd of ${teamOption}: ${odd}`);
+}
+
+// for (const [team, odd] of Object.entries(game.odds)) {
+//   const teamStr = team === 'x' ? 'draw' : `victory ${game[team]}`;
+//   console.log(`Odd of ${teamStr} ${odd}`);
+// }
+
+/*
+
 // Property NAMES
 const properties = Object.keys(openingHours);
 //console.log(properties);
@@ -78,7 +158,7 @@ for (const [key, { open, close }] of entries) {
   console.log(`On ${key} we open at ${open} and close at ${close}`);
 }
 
-/*
+
 
 if (restaurant.openingHours.mon) console.log(restaurant.openingHours.mon.open);
 
