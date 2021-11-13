@@ -55,6 +55,106 @@ const restaurant = {
   },
 };
 
+const airline = 'TAP Air Portugal';
+console.log(airline.toLocaleLowerCase());
+console.log(airline.toUpperCase());
+
+// Fix capitalization in name
+const passenger = 'jOnaS'; // should be Jonas
+const passengerLower = passenger.toLowerCase();
+const passengerCorrect =
+  passengerLower[0].toLocaleUpperCase() + passengerLower.slice(1);
+console.log(passengerCorrect);
+
+// Check email
+const email = 'hello@gmail.com';
+const loginEmail = '  Hello@Gmail.Com \n';
+
+// const lowerEmail = loginEmail.toLowerCase();
+// const trimmedEmail = lowerEmail.trim();
+// console.log(trimmedEmail);
+
+const normalizedEmail = loginEmail.toLowerCase().trim();
+console.log(normalizedEmail);
+console.log(email === normalizedEmail);
+
+// Replacing
+const priceEU = '288,97€';
+const priceUS = priceEU.replace('€', '$').replace(',', '.');
+console.log(priceUS);
+
+const announcement =
+  'All passengers come to boarding door 23. Boarding door 23.';
+console.log(announcement);
+//console.log(announcement.replace('door', 'gate'));
+console.log(announcement.replace(/door/g, 'gate'));
+console.log(announcement.replaceAll('door', 'gate'));
+
+// Booleans
+const plane = 'Airbus A320neo';
+console.log(plane.includes('A320'));
+console.log(plane.includes('Boeing'));
+console.log(plane.startsWith('Air'));
+
+if (plane.startsWith('Airbus') && plane.endsWith('neo')) {
+  console.log('Part of the new Airbus family');
+} else console.log('Not part of the new Airbus family');
+
+// Practice exercise
+const checkBaggage = function (items) {
+  const baggage = items.toLocaleLowerCase();
+  baggage.includes('knife') || baggage.includes('lighter')
+    ? console.log('You are not allowed on board')
+    : console.log('Welcome aboard!');
+};
+checkBaggage('I have a laptop, some Food and a Lighter');
+checkBaggage('Sandwich and keys');
+checkBaggage('Got some snacks, mobile phone, and a pocket knife');
+/* 
+
+const airline = 'TAP Air Portugal';
+const plane = 'A320';
+
+console.log(plane[0]);
+console.log(plane[1]);
+console.log(plane[2]);
+console.log('B737'[0]);
+console.log(airline.length);
+console.log('B737'.length);
+
+console.log(airline.indexOf('r')); // first time finding letter r
+console.log(airline.lastIndexOf('r')); // last time finding letter r
+console.log(airline.indexOf('Portugal')); // case sensitive
+
+console.log(airline.slice(4));
+console.log(airline.slice(4, 7)); // starts from 4, stops on 6, 7-4 = 3, it will write 4th, 5th and 6th
+
+console.log(airline.slice(0, airline.indexOf(' ')));
+console.log(airline.slice(airline.lastIndexOf(' ') + 1));
+
+console.log(airline.slice(-2));
+console.log(airline.slice(1, -1));
+
+const checkMiddleSeat = function (seat) {
+  // B and E are middle seats
+  const s = seat.slice(-1);
+  s === 'B' || s === 'E'
+    ? console.log('You got middle seat')
+    : console.log('You got premium seat');
+};
+
+checkMiddleSeat('11B');
+checkMiddleSeat('23C');
+checkMiddleSeat('3E');
+
+// methods work on string becasue whenever we call a method an a string js automatically converts string primitive to string object with the same content and then on that object the methods is being called, this process is being called BOXING, it takes string and puts in to a box which is the object
+
+console.log(new String('jonas'));
+console.log(typeof new String('jonas')); // this happens when we call method on string, and when method is done object is converted back to primitive string
+console.log(typeof new String('jonas').slice(1));
+
+
+
 // CODING CHALLENGE #3
 
 const gameEvents = new Map([
@@ -70,6 +170,8 @@ const gameEvents = new Map([
   [80, '⚽ GOAL'],
   [92, '🟨 Yellow card'],
 ]);
+
+
 
 // 1.
 // const events = new Set();
@@ -103,7 +205,7 @@ for (let [key, value] of gameEvents) {
   console.log(mystr);
 }
 
-/*
+
 
 const question = new Map([
   ['question', 'What is the best programming language in the world ?'],
