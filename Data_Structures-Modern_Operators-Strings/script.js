@@ -55,6 +55,22 @@ const restaurant = {
   },
 };
 
+document.body.append(document.createElement('textarea'));
+document.body.append(document.createElement('button'));
+
+document.querySelector('button').addEventListener('click', function () {
+  const textArea = document.querySelector('textarea').value;
+  const rows = textArea.split('\n');
+
+  for (const [i, row] of rows.entries()) {
+    const [first, second] = row.toLowerCase().trim().split('_');
+    const secondFinal = second[0].toUpperCase() + second.slice(1);
+    const final = [first, secondFinal].join('');
+    console.log(`${final.padEnd(20)}${'✔'.repeat(i + 1)}`);
+  }
+});
+
+/* 
 console.log('a+very+nice+string'.split('+'));
 console.log('Lovre Begs'.split(' '));
 
@@ -102,7 +118,7 @@ planesInLine(5);
 planesInLine(3);
 planesInLine(9);
 
-/* 
+
 
 const airline = 'TAP Air Portugal';
 console.log(airline.toLocaleLowerCase());
