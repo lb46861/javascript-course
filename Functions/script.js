@@ -54,7 +54,7 @@ newPassport(lovre);
 checkIn(flight, lovre);
 // We are passing the reference TO the function but not BY the function !
 
-*/
+
 
 const oneWord = function (str) {
   //return str.replaceAll(' ', '').toLowerCase();
@@ -87,3 +87,21 @@ document.body.addEventListener('click', high5);
 // in this example addEventListener is High-Order function and high5 is call-back function
 
 ['lovre', 'stipe', 'duje'].forEach(high5);
+
+*/
+
+const greet = function (greeting) {
+  return function (name) {
+    console.log(`${greeting} ${name}`);
+  };
+};
+
+const myGreet = greet('Hey');
+myGreet('Lovre');
+myGreet('Duje ');
+
+greet('Hello')('Duje');
+
+const greetArr = greeting => name => console.log(`${greeting} ${name}`);
+
+greetArr('Hi')('Lovre');
