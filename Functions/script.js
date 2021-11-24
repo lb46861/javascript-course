@@ -88,7 +88,7 @@ document.body.addEventListener('click', high5);
 
 ['lovre', 'stipe', 'duje'].forEach(high5);
 
-*/
+
 
 const greet = function (greeting) {
   return function (name) {
@@ -105,3 +105,59 @@ greet('Hello')('Duje');
 const greetArr = greeting => name => console.log(`${greeting} ${name}`);
 
 greetArr('Hi')('Lovre');
+
+*/
+
+const lufthansa = {
+  airline: 'Lufthansa',
+  iataCode: 'LH',
+  bookings: [],
+  //book: function(){}
+  book(flightNum, name) {
+    console.log(
+      `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+    );
+    this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
+  },
+};
+
+lufthansa.book(239, 'Lovre');
+lufthansa.book(635, 'John Smith');
+console.log(lufthansa.bookings);
+
+const eurowings = {
+  airline: 'Eurowings',
+  iataCode: 'EW',
+  bookings: [],
+};
+const book = lufthansa.book;
+
+// Does not work
+// book(23, 'Sarah Williams');
+
+// This is how we do it
+// CALL METHOD
+book.call(eurowings, 23, 'Sarah Williams');
+console.log(eurowings);
+
+book.call(lufthansa, 239, 'Stan Smith');
+console.log(lufthansa);
+
+const swiss = {
+  airline: 'Swiss Air Lines',
+  iataCode: 'LX',
+  bookings: [],
+};
+
+book.call(swiss, 333, 'Lovre B');
+book.call(swiss, 123, 'Peter Parker');
+//console.log(swiss);
+
+// APPLY METHOD
+const flightData = [583, 'George Washington'];
+book.apply(swiss, flightData);
+console.log(swiss);
+
+// better option
+book.call(swiss, ...flightData);
+console.log(swiss);
