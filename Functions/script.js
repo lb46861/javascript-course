@@ -106,7 +106,7 @@ const greetArr = greeting => name => console.log(`${greeting} ${name}`);
 
 greetArr('Hi')('Lovre');
 
-*/
+
 
 const lufthansa = {
   airline: 'Lufthansa',
@@ -116,93 +116,134 @@ const lufthansa = {
   book(flightNum, name) {
     console.log(
       `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+      );
+      this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
+    },
+  };
+  
+  lufthansa.book(239, 'Lovre');
+  lufthansa.book(635, 'John Smith');
+  console.log(lufthansa.bookings);
+  
+  const eurowings = {
+    airline: 'Eurowings',
+    iataCode: 'EW',
+    bookings: [],
+  };
+  const book = lufthansa.book;
+  
+  // Does not work
+  // book(23, 'Sarah Williams');
+  
+  // This is how we do it
+  // CALL METHOD
+  book.call(eurowings, 23, 'Sarah Williams');
+  console.log(eurowings);
+  
+  book.call(lufthansa, 239, 'Stan Smith');
+  console.log(lufthansa);
+  
+  const swiss = {
+    airline: 'Swiss Air Lines',
+    iataCode: 'LX',
+    bookings: [],
+  };
+  
+  book.call(swiss, 333, 'Lovre B');
+  book.call(swiss, 123, 'Peter Parker');
+  //console.log(swiss);
+  
+  // APPLY METHOD
+  const flightData = [583, 'George Washington'];
+  book.apply(swiss, flightData);
+  console.log(swiss);
+  
+  // better option
+  book.call(swiss, ...flightData);
+  console.log(swiss);
+  
+  // Bind method
+  // book.call(eurowings, 23, 'Sarah Williams');
+  
+  // bind will not call a function, it will return a new function where THIS keyword is always the same
+  const bookEW = book.bind(eurowings);
+  const bookLH = book.bind(lufthansa);
+  const bookLX = book.bind(swiss);
+  bookEW(23, 'Steven Williams');
+  bookLH(55, 'Stephen Curry');
+  bookLX(77, 'Amadeus Mart');
+  
+  const bookEW23 = book.bind(eurowings, 23);
+  bookEW23('Marco Polo');
+  bookEW23('Lovre Beg');
+  
+  // With Event Listeners
+  lufthansa.planes = 300;
+  lufthansa.buyPlane = function () {
+    console.log(this);
+    this.planes++;
+    console.log(this.planes);
+  };
+  //lufthansa.buyPlane();
+  document
+  .querySelector('.buy')
+  .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
+  
+  // Partial application
+  const addTax = (rate, value) => value + value * rate;
+  console.log(addTax(0.1, 200));
+  
+  const addVAT = addTax.bind(null, 0.23);
+  
+  console.log(addVAT(100));
+  console.log(addVAT(23));
+  
+  const addTaxRate = function (rate) {
+    return function (value) {
+      return value + value * rate;
+    };
+  };
+  const addVAT2 = addTaxRate(0.23);
+  console.log(addVAT2(100));
+  console.log(addVAT2(23));
+  
+  */
+
+const poll = {
+  question: 'What is your favourite programming language ?',
+  options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+  answers: new Array(4).fill(0),
+  registerNewAnswer(answer) {
+    const a = Number(
+      prompt(`${this.question}\n${this.options.join(
+        '\n'
+      )}\n(Write option number)
+    `)
     );
-    this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
+
+    typeof a === 'number' && a < this.answers.length
+      ? this.answers[a]++
+      : console.log('You writted invalid option.');
+
+    this.displayResult('array');
+    this.displayResult('string');
+  },
+  displayResult(type) {
+    if (type === 'array') console.log(this.answers);
+    else if (type === 'string')
+      console.log(`Poll results are ${this.answers.join(', ')}`);
   },
 };
 
-lufthansa.book(239, 'Lovre');
-lufthansa.book(635, 'John Smith');
-console.log(lufthansa.bookings);
-
-const eurowings = {
-  airline: 'Eurowings',
-  iataCode: 'EW',
-  bookings: [],
-};
-const book = lufthansa.book;
-
-// Does not work
-// book(23, 'Sarah Williams');
-
-// This is how we do it
-// CALL METHOD
-book.call(eurowings, 23, 'Sarah Williams');
-console.log(eurowings);
-
-book.call(lufthansa, 239, 'Stan Smith');
-console.log(lufthansa);
-
-const swiss = {
-  airline: 'Swiss Air Lines',
-  iataCode: 'LX',
-  bookings: [],
-};
-
-book.call(swiss, 333, 'Lovre B');
-book.call(swiss, 123, 'Peter Parker');
-//console.log(swiss);
-
-// APPLY METHOD
-const flightData = [583, 'George Washington'];
-book.apply(swiss, flightData);
-console.log(swiss);
-
-// better option
-book.call(swiss, ...flightData);
-console.log(swiss);
-
-// Bind method
-// book.call(eurowings, 23, 'Sarah Williams');
-
-// bind will not call a function, it will return a new function where THIS keyword is always the same
-const bookEW = book.bind(eurowings);
-const bookLH = book.bind(lufthansa);
-const bookLX = book.bind(swiss);
-bookEW(23, 'Steven Williams');
-bookLH(55, 'Stephen Curry');
-bookLX(77, 'Amadeus Mart');
-
-const bookEW23 = book.bind(eurowings, 23);
-bookEW23('Marco Polo');
-bookEW23('Lovre Beg');
-
-// With Event Listeners
-lufthansa.planes = 300;
-lufthansa.buyPlane = function () {
-  console.log(this);
-  this.planes++;
-  console.log(this.planes);
-};
-//lufthansa.buyPlane();
 document
-  .querySelector('.buy')
-  .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
+  .querySelector('.poll')
+  .addEventListener('click', poll.registerNewAnswer.bind(poll));
 
-// Partial application
-const addTax = (rate, value) => value + value * rate;
-console.log(addTax(0.1, 200));
+// Writing { answers: [...]} we sent new object so THIS keyword will apply to the new object we have send
+poll.displayResult.call({ answers: [5, 2, 3] }, 'string');
+poll.displayResult.call({ answers: [1, 5, 3, 9, 6, 1] }, 'string');
+poll.displayResult.call({ answers: [1, 5, 3, 9, 6, 1] }, 'array');
 
-const addVAT = addTax.bind(null, 0.23);
-
-console.log(addVAT(100));
-console.log(addVAT(23));
-
-const addTaxRate = function (rate) {
-  return function (value) {
-    return value + value * rate;
-  };
-};
-const addVAT2 = addTaxRate(0.23);
-console.log(addVAT2(100));
-console.log(addVAT2(23));
+// Test data for bonus:
+// * Data 1: [5, 2, 3]
+// * Data 2: [1, 5, 3, 9, 6, 1]
