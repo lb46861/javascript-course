@@ -207,7 +207,7 @@ const lufthansa = {
   console.log(addVAT2(100));
   console.log(addVAT2(23));
   
-  */
+
 
 const poll = {
   question: 'What is your favourite programming language ?',
@@ -247,3 +247,29 @@ poll.displayResult.call({ answers: [1, 5, 3, 9, 6, 1] }, 'array');
 // Test data for bonus:
 // * Data 1: [5, 2, 3]
 // * Data 2: [1, 5, 3, 9, 6, 1]
+
+*/
+
+const runOnce = function () {
+  console.log('This will never run again !');
+};
+runOnce();
+runOnce();
+
+console.log('-----');
+// IIFE Immediately Invoked Funciton Expresion
+(function () {
+  console.log('This will never run again !');
+  const isPrivate = 23;
+})();
+
+//console.log(isPrivate);
+
+(() => console.log('This will ALSO never run again !'))();
+
+{
+  const isPrivate = 23;
+  var notPrivate = 22;
+}
+//console.log(isPrivate);
+console.log(notPrivate);
