@@ -172,3 +172,30 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
   });
   
   */
+
+// Coding challenge #1
+
+// Data 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
+// Data 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
+
+const julia = [3, 5, 2, 12, 7];
+const kate = [4, 1, 15, 8, 3];
+
+function checkdogs(dogsJulia, dogsKate) {
+  // const correctJulia = dogsJulia.slice()
+  const correctJulia = [...dogsJulia];
+  correctJulia.splice(0, 1);
+  correctJulia.splice(-2);
+  // const both = [...correctJulia, ...dogsKate];
+  const both = correctJulia.concat(dogsKate);
+  return both;
+}
+
+const both = checkdogs(julia, kate);
+both.forEach(function (mov, i) {
+  mov >= 3
+    ? console.log(`Dog number ${i + 1} is an adult, and is ${mov} years old`)
+    : console.log(
+        `Dog number ${i + 1} is still a puppy 🐶, and is ${mov} years old`
+      );
+});
