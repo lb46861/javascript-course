@@ -77,6 +77,18 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const createUsername = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+createUsername(accounts);
+
 // Using innerHTML means that any JavaScript references to the descendants of element will be removed. When you use insertAdjacentHTML , adding additional content will not corrupt the existing JS references and the existing nodes are not altered.
 
 /////////////////////////////////////////////////
@@ -200,29 +212,30 @@ both.forEach(function (mov, i) {
       );
 });
 
-*/
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const eurToUsd = 1.1;
 
 // const movementsUSD = movements.map(function (mov) {
-//   return mov * eurToUsd;
-// });
-
-const movementsUSD = movements.map(mov => mov * eurToUsd);
-
-console.log(movements);
-
-console.log(movementsUSD);
-
-const movementsUSDFor = [];
-for (const mov of movements) movementsUSDFor.push(mov * eurToUsd);
-console.log(movementsUSDFor);
-
-const movementsDescriptions = movements.map(
-  (mov, i) =>
+  //   return mov * eurToUsd;
+  // });
+  
+  const movementsUSD = movements.map(mov => mov * eurToUsd);
+  
+  console.log(movements);
+  
+  console.log(movementsUSD);
+  
+  const movementsUSDFor = [];
+  for (const mov of movements) movementsUSDFor.push(mov * eurToUsd);
+  console.log(movementsUSDFor);
+  
+  const movementsDescriptions = movements.map(
+    (mov, i) =>
     `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(
       mov
-    )}`
-);
-console.log(movementsDescriptions);
+      )}`
+      );
+      console.log(movementsDescriptions);
+      
+*/
