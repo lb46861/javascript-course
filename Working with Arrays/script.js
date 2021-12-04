@@ -77,6 +77,12 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} €`;
+};
+calcDisplayBalance(account1.movements);
+
 const createUsername = function (accs) {
   accs.forEach(function (acc) {
     acc.username = acc.owner
@@ -86,7 +92,6 @@ const createUsername = function (accs) {
       .join('');
   });
 };
-
 createUsername(accounts);
 
 // Using innerHTML means that any JavaScript references to the descendants of element will be removed. When you use insertAdjacentHTML , adding additional content will not corrupt the existing JS references and the existing nodes are not altered.
@@ -238,4 +243,47 @@ const eurToUsd = 1.1;
       );
       console.log(movementsDescriptions);
       
+
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const deposits = movements.filter(function (mov, i, arr) {
+  return mov > 0;
+});
+console.log(movements);
+console.log(deposits);
+
+const depositsFor = [];
+for (const mov of movements) if (mov > 0) depositsFor.push(mov);
+console.log(depositsFor);
+
+// Same way we can make withdrawals with Array function
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+
+
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+//console.log(movements);
+
+// accumulator is like a snowball
+
+// const balance = movements.reduce(function (accumulator, curr, i, arr) {
+//   console.log(`Iteration number ${i}: ${accumulator}`);
+//   return accumulator + curr;
+// }, 0);
+
+const balance = movements.reduce((accumulator, curr) => accumulator + curr, 0);
+console.log(balance);
+
+let balance2 = 0;
+for (const mov of movements) balance2 += mov;
+console.log(balance2);
+
+// Maximum value
+const maxValue = movements.reduce(
+  (accumulator, curr) => (accumulator > curr ? accumulator : curr),
+  movements[0]
+);
+console.log(maxValue);
+
 */
