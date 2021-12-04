@@ -69,7 +69,7 @@ const displayMovements = function (movements) {
     const html = ` 
     <div class="movements__row">
     <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
-    <div class="movements__value">${mov}</div>
+    <div class="movements__value">${mov}€</div>
     </div>
   `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -82,6 +82,30 @@ const calcDisplayBalance = function (movements) {
   labelBalance.textContent = `${balance} €`;
 };
 calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}€`;
+
+  const outcomes = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + Math.abs(mov), 0);
+  labelSumOut.textContent = `${outcomes}€`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => {
+      //console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest}€`;
+};
+calcDisplaySummary(account1.movements);
+// WE USUALLY AVOID CHAINING METHODS THAT MUTATE OUR ORIGINAL ARRAY
 
 const createUsername = function (accs) {
   accs.forEach(function (acc) {
@@ -285,5 +309,39 @@ const maxValue = movements.reduce(
   movements[0]
 );
 console.log(maxValue);
+
+
+
+// Coding challenge #2
+
+// Test data:
+// Data 1: [5, 2, 4, 1, 15, 8, 3]
+// Data 2: [16, 6, 10, 5, 6, 1, 4]
+
+const calcAverageHumanAge = function (dogsYears) {
+  return dogsYears
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, age, i, newArr) => acc + age / newArr.length, 0);
+};
+console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
+console.log(calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]));
+
+
+
+const eurToUsd = 1.1;
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+console.log(movements);
+
+// PIPELINE
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)
+  .map((mov, i, arr) => {
+    //console.log(arr);
+    return mov * eurToUsd;
+  })
+  //.map(mov => mov * eurToUsd)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(totalDepositsUSD + '$');
 
 */
