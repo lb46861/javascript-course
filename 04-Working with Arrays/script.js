@@ -176,6 +176,21 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // Add movement
+    currentAccount.movements.push(amount);
+
+    //Update UI
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+});
+
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
   if (
@@ -463,4 +478,56 @@ function returnAcc(accounts) {
 }
 const myacc = returnAcc(accounts);
 console.log(myacc);
+
+// METHOD SOME
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+console.log(movements);
+
+// equality
+console.log(movements.includes(-130));
+
+// condition
+console.log(movements.some(mov => mov === -130));
+const anyDeposits = movements.some(mov => mov > 0);
+console.log(anyDeposits);
+
+// METHOD EVERY
+// checks if every element in array satisfies the condition and then returns true if all elements do
+console.log(movements.every(mov => mov > 0));
+console.log(account4.movements.every(mov => mov > 0));
+
+// Separete callback
+const deposit = mov => mov > 0;
+console.log(movements.some(deposit));
+console.log(movements.every(deposit));
+console.log(movements.filter(deposit));
+
+
+// METHODS FLAT and FLATMAP
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrDeep.flat(2));
+
+const accountMovements = accounts.map(acc => acc.movements);
+console.log(accountMovements);
+const allMovements = accountMovements.flat();
+console.log(allMovements);
+const overallBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
+//console.log(overallBalance);
+
+// Nested, better way of doing this
+const overalBalance = accounts
+.map(acc => acc.movements)
+.flat()
+.reduce((acc, mov) => acc + mov, 0);
+console.log(overallBalance);
+
+// FLATMAP - combines MAP and FLAT method into 1 method, which is better for performance, flatMap only foes 1 level deep
+const overalBalance2 = accounts
+.flatMap(acc => acc.movements)
+.reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance2);
+
 */
