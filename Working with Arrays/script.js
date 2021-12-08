@@ -159,6 +159,8 @@ btnTransfer.addEventListener('click', function (e) {
   );
   const amount = Number(inputTransferAmount.value);
 
+  inputTransferAmount.value = inputTransferTo.value = '';
+
   if (
     amount > 0 &&
     receiverAcc &&
@@ -172,8 +174,26 @@ btnTransfer.addEventListener('click', function (e) {
     // Update UI
     updateUI(currentAccount);
   }
+});
 
-  inputTransferAmount.value = inputTransferTo.value = '';
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+
+    // Delte selected account
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
+  inputClosePin.blur();
 });
 
 // Using innerHTML means that any JavaScript references to the descendants of element will be removed. When you use insertAdjacentHTML , adding additional content will not corrupt the existing JS references and the existing nodes are not altered.
