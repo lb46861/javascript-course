@@ -287,7 +287,6 @@ console.log(Number.isInteger(23));
 console.log(Number.isInteger(23.0));
 console.log(Number.isInteger(23 / 0));
 
-*/
 
 console.log(Math.sqrt(25));
 console.log(25 ** (1 / 2));
@@ -304,7 +303,7 @@ console.log(Math.PI * Number.parseFloat('10px') ** (1 / 2));
 console.log(Math.trunc(Math.random() * 6) + 1);
 
 const randomInt = (min, max) =>
-  Math.floor(Math.random() * (max - min) + 1) + min;
+Math.floor(Math.random() * (max - min) + 1) + min;
 
 console.log(randomInt(1, 10));
 
@@ -325,3 +324,61 @@ console.log(Math.floor(-5.6));
 console.log((2.7).toFixed(0));
 console.log((2.7).toFixed(3));
 console.log(+(2.345).toFixed(2));
+
+
+
+// Reamainder operator
+console.log(5 % 2);
+console.log(5 / 2);
+
+console.log(8 % 3);
+console.log(8 / 3); // 8 = 2 * 3 + 2
+
+console.log(7 % 2);
+console.log(7 / 2);
+
+const isEven = n => n % 2 === 0;
+console.log(isEven(5));
+console.log(isEven(8));
+console.log(isEven(23));
+
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    if (i % 2 === 0) row.style.backgroundColor = 'orangered';
+    if (i % 3 === 0) row.style.backgroundColor = 'blue';
+  });
+});
+
+
+
+console.log(2 ** 53 - 1);
+console.log(Number.MAX_SAFE_INTEGER);
+console.log(2 ** 53 + 3);
+
+console.log(87234678234623146891234682317894n);
+console.log(BigInt(8723467));
+
+// Operations
+console.log(10000n + 10000n);
+console.log(981723498712349872312341234149812n * 10000n);
+// console.log(Math.sqrt(16n));
+
+const huge = 7896141n;
+const num = 23;
+console.log(huge * BigInt(num));
+
+// Exceptions
+console.log(20n > 15);
+console.log(20n === 20);
+console.log(20n == 20);
+console.log(typeof 20n);
+console.log(typeof 20);
+
+console.log(huge + ' is REALLY big!!!');
+
+// Divisions
+console.log(12n / 3n);
+console.log(10n / 3n);
+console.log(10 / 3);
+
+*/
