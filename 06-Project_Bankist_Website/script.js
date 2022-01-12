@@ -120,6 +120,7 @@ tabsContainer.addEventListener('click', function (e) {
 // we use mouseover instead of mouseenter because mouseenter doesnt allow bubbling
 
 const handleHover = function (e) {
+  //console.log(this);
   if (e.target.classList.contains('nav__link')) {
     const link = e.target;
     const siblings = link.closest('.nav__links').querySelectorAll('.nav__link');
@@ -145,6 +146,46 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 //   handleHover(e, 1);
 // });
 
+//  Sticky Navigation
+
+// const initialCoords = section1.getBoundingClientRect();
+// console.log(initialCoords);
+
+// window.addEventListener('scroll', function () {
+//   console.log(window.scrollY);
+//   if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
+//   else nav.classList.remove('sticky');
+// });
+
+// Better Sticky Navigation : Intersection Observer API
+
+// const observerCallback = function (entries, observer) {
+//   entries.forEach(entry => console.log(entry));
+// };
+
+// const observerOptions = {
+//   root: null,
+//   treshold: [0, 0.2],
+// };
+
+// const observer = new IntersectionObserver(observerCallback, observerOptions);
+// observer.observe(section1);
+
+const header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect().height;
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(header);
 /*
 
 // Selecting elements
