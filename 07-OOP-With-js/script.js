@@ -5,7 +5,7 @@ const Person = function (firstName, birthYear) {
   this.firstName = firstName;
   this.birthYear = birthYear;
 
-  // Never do this, instead we will use prototypes and prototype inheritance, with this if we have 1000 objects function will be called 1000 times
+  // Never do this, instead we will use prototypes and prototype inheritance, with this if we have 1000 objects function will be copied 1000 times
   //   this.calcAge = function () {
   //     console.log(2022 - this.birthYear);
   //   };
@@ -28,3 +28,30 @@ const jay = 'Jay';
 
 console.log(jonas instanceof Person);
 console.log(jay instanceof Person);
+
+// Prototypes
+console.log(Person.prototype);
+
+Person.prototype.calcAge = function () {
+  console.log(2022 - this.birthYear);
+};
+
+jonas.calcAge();
+matilda.calcAge();
+
+console.log(jonas.__proto__);
+console.log(jonas.__proto__ === Person.prototype);
+
+// Person.prototype is prototype of jonas, matilda, jack
+// Person.prototype is not prototype of Person
+console.log(Person.prototype.isPrototypeOf(jonas));
+console.log(Person.prototype.isPrototypeOf(matilda));
+console.log(Person.prototype.isPrototypeOf(Person));
+
+// .prototypeOfLinkedObjects
+
+Person.prototype.species = 'Homo Sapiens';
+console.log(jonas.species, matilda.species);
+
+console.log(jonas.hasOwnProperty('species')); // Gives false because its in the prototype property of person, not directly on the object, Person doesnt have its OWN property for species
+console.log(jonas.hasOwnProperty('firstName'));
