@@ -1,6 +1,7 @@
 'use strict';
 
 /*
+ */
 const Person = function (firstName, birthYear) {
   // Instance properties
   this.firstName = firstName;
@@ -29,6 +30,13 @@ const jay = 'Jay';
 
 console.log(jonas instanceof Person);
 console.log(jay instanceof Person);
+
+Person.hey = function () {
+  console.log('Hey there 👋');
+  console.log(this);
+};
+Person.hey();
+// jonas.hey();
 
 // Prototypes
 console.log(Person.prototype);
@@ -80,7 +88,6 @@ console.log(arr.unique());
 const h1 = document.querySelector('h1');
 console.dir(x => x + 1);
 
-
 // Coding challenge #1
 
 const Car = function (make, speed) {
@@ -105,8 +112,6 @@ bmw.brake();
 mercedes.accelerate();
 mercedes.brake();
 
-*/
-
 // ES6 CLasses
 
 // class expresssion
@@ -121,6 +126,7 @@ class PersonCl {
 
   // All methods that are writen outisde of the constructor will be in prototype of the object and not on the object themsleve
 
+  // Instance methods
   // Methods will be added to .prototype property which are prototypes of objects created by this class
   calcAge() {
     console.log(2022 - this.birthYear);
@@ -144,6 +150,12 @@ class PersonCl {
   get fullName() {
     return this._fullName;
   }
+
+  // Static
+  static hey() {
+    console.log('Hey there 👋');
+    console.log(this);
+  }
 }
 
 const jessica = new PersonCl('Jessica Davis', 1999);
@@ -164,6 +176,8 @@ jessica.greet();
 // 3. The body of the classes is always executed in STRICT mode
 
 const walter = new PersonCl('Walter White', 1998);
+
+PersonCl.hey();
 
 const account = {
   owner: 'Jonas',
