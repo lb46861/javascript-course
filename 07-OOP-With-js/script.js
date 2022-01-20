@@ -80,7 +80,6 @@ console.log(arr.unique());
 const h1 = document.querySelector('h1');
 console.dir(x => x + 1);
 
-*/
 
 // Coding challenge #1
 
@@ -105,3 +104,45 @@ bmw.accelerate();
 bmw.brake();
 mercedes.accelerate();
 mercedes.brake();
+
+*/
+
+// ES6 CLasses
+
+// class expresssion
+// const PersonCl = class {};
+
+// class declaration
+class PersonCl {
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+
+  // All methods that are writen outisde of the constructor will be in prototype of the object and not on the object themsleve
+
+  // Methods will be added to .prototype property which are prototypes of objects created by this class
+  calcAge() {
+    console.log(2022 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hey ${this.firstName}`);
+  }
+}
+
+const jessica = new PersonCl('Jessica', 1999);
+console.log(jessica);
+jessica.calcAge();
+console.log(jessica.__proto__ === PersonCl.prototype);
+
+console.log(PersonCl.prototype);
+
+// PersonCl.prototype.greet = function () {
+//   console.log(`Hey ${this.firstName}`);
+// };
+jessica.greet();
+
+// 1. CLasses are NOT hoisted
+// 2. CLasses are first-class citites, just like functions, we can cast them into functions and also return them from the functions
+// 3. The body of the classes is always executed in STRICT mode
