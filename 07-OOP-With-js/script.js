@@ -256,7 +256,7 @@ bmwCl.speedUS = 50;
 console.log(bmwCl);
 console.log(bmwCl.speedUS);
 
- */
+
 
 const Person = function (firstName, birthYear) {
   this.firstName = firstName;
@@ -293,3 +293,54 @@ console.log(mike instanceof Object);
 
 Student.prototype.constructor = Student;
 console.dir(Student.prototype.constructor);
+
+ */
+
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+
+Car.prototype.accelerate = function () {
+  this.speed += 10;
+  console.log(this.speed);
+};
+
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(this.speed);
+};
+
+const bmw = new Car('BMW', 120);
+console.log(bmw);
+
+const EV = function (make, speed, battery) {
+  Car.call(this, make, speed);
+  this.battery = battery;
+};
+
+// Link the prototypes
+EV.prototype = Object.create(Car.prototype);
+
+EV.prototype.chargeBattery = function (chargeTo) {
+  this.battery = chargeTo;
+};
+
+// Child class can overwrite method that it enherited from parent class
+EV.prototype.accelerate = function () {
+  this.speed += 20;
+  this.battery -= 1;
+  console.log(
+    `${this.make} going at ${this.speed} km/h, with a charge of ${this.battery}%`
+  );
+};
+
+const tesla = new EV('Tesla', 120, 23);
+tesla.chargeBattery(90);
+console.log(tesla);
+tesla.brake();
+
+tesla.accelerate();
+
+EV.prototype.constructor = EV;
+console.log(EV.prototype.constructor);
