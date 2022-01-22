@@ -294,7 +294,9 @@ console.log(mike instanceof Object);
 Student.prototype.constructor = Student;
 console.dir(Student.prototype.constructor);
 
- */
+
+
+// Coding challenge #3
 
 const Car = function (make, speed) {
   this.make = make;
@@ -344,3 +346,65 @@ tesla.accelerate();
 
 EV.prototype.constructor = EV;
 console.log(EV.prototype.constructor);
+
+ */
+
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  // All methods that are writen outisde of the constructor will be in prototype of the object and not on the object themsleve
+
+  // Instance methods
+  // Methods will be added to .prototype property which are prototypes of objects created by this class
+  calcAge() {
+    console.log(2022 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hey ${this.fullName}`);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  // Set a property that already exists
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name!`);
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+
+  // Static
+  static hey() {
+    console.log('Hey there 👋');
+    console.log(this);
+  }
+}
+
+class StudentCl extends PersonCl {
+  // If we dont have any new members for StudentCl we do not need a constructor but in this case we are adding "course"
+  constructor(fullName, birthYear, course) {
+    // super Always needs to happen first
+    super(fullName, birthYear);
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.fullName} and I study ${this.course}`);
+  }
+
+  calcAge() {
+    console.log(`I'm ${2022 - this.birthYear} years old student.`);
+  }
+}
+
+const Martha = new StudentCl('Martha Jones', 2005, 'Computer Science');
+Martha.introduce();
+Martha.calcAge();
