@@ -77,7 +77,13 @@ class App {
   #mapEvent;
   #workouts = [];
   constructor() {
+    // Get user's position
     this._getPosition();
+
+    // Get data from local storage
+    this._getLocalStorage();
+
+    // Attach event handlers
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
@@ -97,12 +103,12 @@ class App {
     //console.log(position);
     const { latitude } = position.coords;
     const { longitude } = position.coords;
-    console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
+    //console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
 
     const coords = [latitude, longitude];
 
     // L is namespace for Leaflet geolocation library
-    console.log(this);
+    //console.log(this);
     this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
     //console.log(map);
 
@@ -113,6 +119,10 @@ class App {
 
     // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this));
+
+    this.#workouts.forEach(workout => {
+      this._renderWorkoutMarker(workout);
+    });
   }
 
   _showForm(mapE) {
@@ -196,6 +206,9 @@ class App {
 
     // Hide form + clear input fields
     this._hideForm();
+
+    // Set local storage to all workouts
+    this._setLocalStorage();
   }
 
   _renderWorkoutMarker(workout) {
@@ -281,7 +294,28 @@ class App {
     });
 
     // using the public interface
-    workout.click();
+    // Objects coming form lcocal storage will not inherit methods it did before !
+    //workout.click();
+  }
+
+  _setLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  }
+
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+
+    if (!data) return;
+
+    this.#workouts = data;
+    this.#workouts.forEach(workout => {
+      this._renderWorkout(workout);
+    });
+  }
+
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload();
   }
 }
 
