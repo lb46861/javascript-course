@@ -86,7 +86,8 @@ class App {
     // Attach event handlers
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
-    containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    containerWorkouts.addEventListener('click', this._deleteWorkout.bind(this));
+    //containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
   }
 
   _getPosition() {
@@ -233,6 +234,7 @@ class App {
     let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
         <h2 class="workout__title">${workout.description}</h2>
+        <button class="btn btn__delete">Delete <i class="fa fa-times clr" aria-hidden="true"></i></button>
         <div class="workout__details">
           <span class="workout__icon">${
             workout.type === 'running' ? '🏃' : '🚴‍♀️'
@@ -278,8 +280,37 @@ class App {
     form.insertAdjacentHTML('afterend', html);
   }
 
-  _moveToPopup(e) {
-    const workoutEl = e.target.closest('.workout');
+  _deleteWorkout(e) {
+    const delButton = e.target.closest('.btn__delete');
+    const myWorkoutEL = e.target.closest('.workout');
+
+    if (!delButton) this._moveToPopup(myWorkoutEL);
+    else {
+      const myWorkout = this.#workouts.find(
+        work => work.id === myWorkoutEL.dataset.id
+      );
+      myWorkoutEL.style.display = 'none';
+
+      const [mylat, mylng] = myWorkout.coords;
+      const latlng = {
+        lat: mylat,
+        lng: mylng,
+      };
+      console.log(latlng);
+
+      this.#map.eachLayer(layer => {
+        if (JSON.stringify(latlng) === JSON.stringify(layer['_latlng']))
+          layer.remove();
+      });
+
+      this.#workouts = this.#workouts.filter(
+        workout => workout.id !== myWorkout.id
+      );
+      this._setLocalStorage();
+    }
+  }
+
+  _moveToPopup(workoutEl) {
     if (!workoutEl) return;
 
     const workout = this.#workouts.find(
@@ -306,9 +337,12 @@ class App {
     const data = JSON.parse(localStorage.getItem('workouts'));
 
     if (!data) return;
-
     this.#workouts = data;
     this.#workouts.forEach(workout => {
+      workout =
+        workout.type === 'running'
+          ? Object.setPrototypeOf(workout, Running.prototype)
+          : Object.setPrototypeOf(workout, Cycling.prototype);
       this._renderWorkout(workout);
     });
   }
