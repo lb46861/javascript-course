@@ -88,6 +88,7 @@ class App {
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._deleteWorkout.bind(this));
+    containerWorkouts.addEventListener('click', this._editWorkout.bind(this));
     btnClearAll.addEventListener('click', this._clearWorkouts.bind(this));
   }
 
@@ -153,18 +154,38 @@ class App {
   }
 
   _newWorkout(e) {
+    e.preventDefault();
+
+    const allWorkouts = document.querySelectorAll('.workout');
+    let workoutEl;
+    if (allWorkouts) {
+      allWorkouts.forEach(workout => {
+        if (workout.classList.contains('edit')) {
+          workoutEl = workout;
+          workout.classList.remove('edit');
+        }
+      });
+    }
+
+    let myworkout, lat, lng, index;
+
+    if (workoutEl) {
+      myworkout = this._getWorkout(workoutEl);
+      [lat, lng] = myworkout.coords;
+      index = this.#workouts.indexOf(myworkout);
+    } else {
+      ({ lat, lng } = this.#mapEvent.latlng);
+    }
+
     const validInputs = (...inputs) =>
       inputs.every(inp => Number.isFinite(inp));
 
     const allPositive = (...inputs) => inputs.every(inp => inp > 0);
 
-    e.preventDefault();
-
     // Get data from form
     const type = inputType.value;
     const distance = +inputDistance.value;
     const duration = +inputDuration.value;
-    const { lat, lng } = this.#mapEvent.latlng;
 
     let workout;
 
@@ -197,20 +218,34 @@ class App {
       }
     }
 
-    // Add new object to workout array
-    this.#workouts.push(workout);
-
-    // Render workout on map as marker
-    this._renderWorkoutMarker(workout);
-
-    // Render new workout on list
-    this._renderWorkout(workout);
+    if (myworkout) {
+      this.#workouts.splice(index, 1, workout);
+      this._hideWorkouts();
+      this._renderAllWorkouts();
+    } else {
+      this.#workouts.push(workout);
+      this._renderWorkoutMarker(workout);
+      this._renderWorkout(workout);
+    }
 
     // Hide form + clear input fields
     this._hideForm();
 
     // Set local storage to all workouts
     this._setLocalStorage();
+  }
+
+  _renderAllWorkouts() {
+    this.#workouts.forEach(workout => {
+      this._renderWorkout(workout);
+    });
+  }
+
+  _hideWorkouts() {
+    const allWorkouts = document.querySelectorAll('.workout');
+    for (let i = 0; i < allWorkouts.length; i++) {
+      allWorkouts[i].style.display = 'none';
+    }
   }
 
   _renderWorkoutMarker(workout) {
@@ -235,6 +270,7 @@ class App {
     let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
         <h2 class="workout__title">${workout.description}</h2>
+        <button class="btn btn__edit">Edit <i class="fa fa-edit" aria-hidden="true"></i></button>
         <button class="btn btn__delete">Delete <i class="fa fa-times-circle clr" aria-hidden="true"></i></button>
         <div class="workout__details">
           <span class="workout__icon">${
@@ -281,15 +317,20 @@ class App {
     form.insertAdjacentHTML('afterend', html);
   }
 
+  _getWorkout(workoutEl) {
+    const workout = this.#workouts.find(
+      wout => wout.id === workoutEl.dataset.id
+    );
+    return workout;
+  }
+
   _deleteWorkout(e) {
     const delButton = e.target.closest('.btn__delete');
     const myWorkoutEL = e.target.closest('.workout');
 
     if (!delButton) this._moveToPopup(myWorkoutEL);
     else {
-      const myWorkout = this.#workouts.find(
-        work => work.id === myWorkoutEL.dataset.id
-      );
+      const myWorkout = this._getWorkout(myWorkoutEL);
       myWorkoutEL.style.display = 'none';
 
       const [mylat, mylng] = myWorkout.coords;
@@ -309,6 +350,18 @@ class App {
 
       this._setLocalStorage();
     }
+  }
+
+  _editWorkout(e) {
+    const editWorkout = e.target.closest('.btn__edit');
+    if (!editWorkout) return;
+    const allWorkouts = document.querySelectorAll('.workout');
+    for (let i = 0; i < allWorkouts.length; i++) {
+      allWorkouts[i].classList.remove('edit');
+    }
+    const workoutEl = e.target.closest('.workout');
+    workoutEl.classList.add('edit');
+    this._showForm();
   }
 
   _clearWorkouts() {
@@ -333,9 +386,7 @@ class App {
   _moveToPopup(workoutEl) {
     if (!workoutEl) return;
 
-    const workout = this.#workouts.find(
-      work => work.id === workoutEl.dataset.id
-    );
+    const workout = this._getWorkout(workoutEl);
 
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
