@@ -221,14 +221,24 @@ a:visited {
 
 .btn {
   display: block;
-  border-radius: 20px;
   border: 0;
   cursor: pointer;
 }
 
 .btn__delete {
+  border-radius: 20px;
   background-color: rgb(168, 32, 32);
   color: #eaeaea;
   padding: 7px;
   margin-bottom: 10px;
+}
+
+.btn__clear {
+  background-color: var(--color-brand--2);
+  color: #eaeaea;
+  padding: 7px;
+  margin-bottom: 10px;
+  text-align: right;
+  border-radius: 2px;
+  font-weight: bold;
 }

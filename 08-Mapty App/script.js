@@ -70,6 +70,7 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+const btnClearAll = document.querySelector('.btn__clear');
 
 class App {
   #map;
@@ -87,7 +88,7 @@ class App {
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._deleteWorkout.bind(this));
-    //containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    btnClearAll.addEventListener('click', this._clearWorkouts.bind(this));
   }
 
   _getPosition() {
@@ -234,7 +235,7 @@ class App {
     let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
         <h2 class="workout__title">${workout.description}</h2>
-        <button class="btn btn__delete">Delete <i class="fa fa-times clr" aria-hidden="true"></i></button>
+        <button class="btn btn__delete">Delete <i class="fa fa-times-circle clr" aria-hidden="true"></i></button>
         <div class="workout__details">
           <span class="workout__icon">${
             workout.type === 'running' ? '🏃' : '🚴‍♀️'
@@ -296,7 +297,6 @@ class App {
         lat: mylat,
         lng: mylng,
       };
-      console.log(latlng);
 
       this.#map.eachLayer(layer => {
         if (JSON.stringify(latlng) === JSON.stringify(layer['_latlng']))
@@ -306,8 +306,28 @@ class App {
       this.#workouts = this.#workouts.filter(
         workout => workout.id !== myWorkout.id
       );
+
       this._setLocalStorage();
     }
+  }
+
+  _clearWorkouts() {
+    // If we run this at begging there wouldnt be any workouts because they did not laod that fast
+    const allWorkouts = document.querySelectorAll('.workout');
+
+    // remove all markers
+    this.#map.eachLayer(layer => {
+      if (layer['_latlng']) layer.remove();
+    });
+
+    // Clear all workouts
+    for (let i = 0; i < allWorkouts.length; i++) {
+      allWorkouts[i].style.display = 'none';
+    }
+
+    // empty workout list and update local storage
+    this.#workouts = [];
+    this._setLocalStorage();
   }
 
   _moveToPopup(workoutEl) {
