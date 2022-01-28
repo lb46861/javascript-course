@@ -71,12 +71,14 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 const btnClearAll = document.querySelector('.btn__clear');
+const btnSort = document.querySelector('.btn__sort');
 
 class App {
   #map;
   #mapZoomLevel = 14;
   #mapEvent;
   #workouts = [];
+  sorted = false;
   constructor() {
     // Get user's position
     this._getPosition();
@@ -90,6 +92,7 @@ class App {
     containerWorkouts.addEventListener('click', this._deleteWorkout.bind(this));
     containerWorkouts.addEventListener('click', this._editWorkout.bind(this));
     btnClearAll.addEventListener('click', this._clearWorkouts.bind(this));
+    btnSort.addEventListener('click', this._sortWorkouts.bind(this));
   }
 
   _getPosition() {
@@ -233,6 +236,27 @@ class App {
 
     // Set local storage to all workouts
     this._setLocalStorage();
+  }
+
+  _sortWorkouts(e) {
+    e.preventDefault();
+    this.sorted = !this.sorted;
+    if (this.sorted) this.#workouts.sort(this._bigSmall);
+    else this.#workouts.sort(this._smallBig);
+    this._hideWorkouts();
+    this._renderAllWorkouts();
+  }
+
+  _bigSmall(a, b) {
+    if (a.distance < b.distance) return -1;
+    if (a.distance > b.distance) return 1;
+    return 0;
+  }
+
+  _smallBig(a, b) {
+    if (a.distance < b.distance) return 1;
+    if (a.distance > b.distance) return -1;
+    return 0;
   }
 
   _renderAllWorkouts() {
