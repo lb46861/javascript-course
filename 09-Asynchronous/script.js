@@ -431,6 +431,7 @@ const getJSON = function (url, errorMsg = 'Something went wrong') {
   });
 };
 
+/*
 const get3Countries = async function (c1, c2, c3) {
   try {
     // const [data1] = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
@@ -450,3 +451,57 @@ const get3Countries = async function (c1, c2, c3) {
 };
 
 get3Countries('portugal', 'canada', 'ukraine');
+
+*/
+
+// Promise.race - receives array of promises and also returns a promise, it's settled as soon as one of the input promises settles
+
+(async function () {
+  const res = await Promise.race([
+    getJSON(`https://restcountries.com/v3.1/name/italy`),
+    getJSON(`https://restcountries.com/v3.1/name/egypt`),
+    getJSON(`https://restcountries.com/v3.1/name/mexico`),
+  ]);
+  console.log(res[0].capital);
+})();
+
+const timeout = function (sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error('Request took too long!'));
+    }, sec * 1000);
+  });
+};
+
+Promise.race([
+  getJSON(`https://restcountries.com/v3.1/name/croatia`),
+  timeout(1),
+])
+  .then(res => console.log(res[0]))
+  .catch(err => console.error(err));
+
+// Promise.allSettled
+
+Promise.allSettled([
+  Promise.resolve('success'),
+  Promise.reject('error'),
+  Promise.resolve('another success'),
+]).then(res => console.log(res));
+
+Promise.all([
+  Promise.resolve('success'),
+  Promise.reject('error'),
+  Promise.resolve('another success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+
+//Promise.any --> Similiar too promise.race but return first fullfilled promise, rejected promises are ignored
+
+Promise.any([
+  Promise.resolve('success'),
+  Promise.reject('error'),
+  Promise.resolve('another success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
